@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../controllers/FideleCtrl.dart';
+import '../widgets/Chargement.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,16 +13,22 @@ class _LoginPageState extends State<LoginPage> {
   Color couleurFond = Colors.white;
 
   String errorMsg = "";
+  bool isVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: couleurFond,
-      body: _body(),
+      body: Stack(
+        children: [
+          _body(context),
+          Chargement(isVisible)
+        ],
+      ),
     );
   }
 
-  Widget _body() {
+  Widget _body(BuildContext context) {
     return Center(
       child: Container(
         width: double.infinity,
@@ -45,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
               _textError(),
-              _buttonWidget(),
+              _buttonWidget(context),
               SizedBox(
                 height: 50,
               ),
@@ -75,19 +85,20 @@ class _LoginPageState extends State<LoginPage> {
             enabledBorder: _bordure(Colors.grey)));
   }
 
-  Widget _buttonWidget() {
+  Widget _buttonWidget(BuildContext ctx) {
     return Container(
       width: 500,
       height: 50,
       child: ElevatedButton(
         onPressed: () {
           errorMsg = "Mot de passe incorrect";
-          //couleurFond =   Colors.black;
-          if (couleurFond == Colors.black) {
-            couleurFond = Colors.white;
-          } else {
-            couleurFond = Colors.black;
-          }
+          isVisible=true;
+          //traitement
+          var ctrl=ctx.read<FideleCtrl>();
+          Map donneesAEnvoyer={"username": "ODC"};
+          ctrl.envoieDonneesAuth(donneesAEnvoyer);
+          isVisible=false;
+
           setState(() {});
         },
         child: Text("Connexion"),
