@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fidele/pages/FidelesPage.dart';
+import 'package:flutter_fidele/widgets/ChampsSaisie.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/FideleCtrl.dart';
@@ -14,52 +16,59 @@ class _LoginPageState extends State<LoginPage> {
 
   String errorMsg = "";
   bool isVisible = false;
+  var formKey = GlobalKey<FormState>();
+  var username = TextEditingController();
+  var password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: couleurFond,
       body: Stack(
-        children: [
-          _body(context),
-          Chargement(isVisible)
-        ],
+        children: [_body(context), Chargement(isVisible)],
       ),
     );
   }
 
   Widget _body(BuildContext context) {
-    return Center(
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 40),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _iconApp(),
-              SizedBox(
-                height: 20,
-              ),
-              Text("Authentification", style: TextStyle(fontSize: 20)),
-              SizedBox(
-                height: 20,
-              ),
-              _loginSaisie(),
-              SizedBox(
-                height: 20,
-              ),
-              _loginSaisie(),
-              SizedBox(
-                height: 20,
-              ),
-              _textError(),
-              _buttonWidget(context),
-              SizedBox(
-                height: 50,
-              ),
-            ],
+    return Form(
+      key: formKey,
+      child: Center(
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 40),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _iconApp(),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Authentification", style: TextStyle(fontSize: 20)),
+                SizedBox(
+                  height: 20,
+                ),
+                ChampSaisie(ctrl: username, label: "Username", required: true),
+                SizedBox(
+                  height: 20,
+                ),
+                ChampSaisie(
+                    ctrl: password,
+                    label: "Mot de passe",
+                    required: true,
+                    isPassword: true),
+                SizedBox(
+                  height: 20,
+                ),
+                _textError(),
+                _buttonWidget(context),
+                SizedBox(
+                  height: 50,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -74,32 +83,35 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _loginSaisie() {
-    return TextField(
-        decoration: InputDecoration(
-            prefixIcon: Icon(Icons.verified_user),
-            labelText: "Saisir Login",
-            hintText: "Saisir...",
-            border: _bordure(Colors.grey),
-            focusedBorder: _bordure(Colors.orange),
-            enabledBorder: _bordure(Colors.grey)));
-  }
-
   Widget _buttonWidget(BuildContext ctx) {
     return Container(
       width: 500,
       height: 50,
       child: ElevatedButton(
-        onPressed: () {
-          errorMsg = "Mot de passe incorrect";
-          isVisible=true;
-          //traitement
-          var ctrl=ctx.read<FideleCtrl>();
-          Map donneesAEnvoyer={"username": "ODC"};
-          ctrl.envoieDonneesAuth(donneesAEnvoyer);
-          isVisible=false;
+        onPressed: () async {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          if (!formKey.currentState!.validate()) {
+            return;
+          }
+          print(username.text);
+          print(password.text);
 
+          // return;
+          errorMsg = "Mot de passe incorrect";
+          isVisible = true;
           setState(() {});
+          //traitement
+          var ctrl = ctx.read<FideleCtrl>();
+          Map donneesAEnvoyer = {"username": username.text};
+          bool status = await ctrl.envoieDonneesAuth(donneesAEnvoyer);
+          await Future.delayed(Duration(seconds: 2));
+          isVisible = false;
+          setState(() {});
+          if (status) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => FidelesPage()));
+          }
         },
         child: Text("Connexion"),
         style: ElevatedButton.styleFrom(
@@ -108,12 +120,6 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(16))),
       ),
     );
-  }
-
-  OutlineInputBorder _bordure(MaterialColor _color) {
-    return OutlineInputBorder(
-        borderSide: BorderSide(width: 2, color: _color),
-        borderRadius: BorderRadius.all(Radius.circular(16)));
   }
 
   Widget _textError() {
