@@ -15,6 +15,8 @@ class FideleCtrl with ChangeNotifier {
     var reponse = await http.post(url, body: dataStr);
     print(reponse.body);
     if (reponse.statusCode == 200) {
+      Map bodyMap = json.decode(reponse.body);
+      print(bodyMap['id']);
       return true;
     }
     return false;
