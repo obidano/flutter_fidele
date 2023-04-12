@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fidele/controllers/UserCtrl.dart';
 import 'package:flutter_fidele/pages/FidelesPage.dart';
 import 'package:flutter_fidele/widgets/ChampsSaisie.dart';
 import 'package:provider/provider.dart';
@@ -101,9 +102,9 @@ class _LoginPageState extends State<LoginPage> {
           isVisible = true;
           setState(() {});
           //traitement
-          var ctrl = ctx.read<FideleCtrl>();
+          var ctrl = ctx.read<UserCtrl>();
           Map donneesAEnvoyer = {"username": username.text};
-          bool status = await ctrl.envoieDonneesAuth(donneesAEnvoyer);
+          bool status = await ctrl.authentifierUser(donneesAEnvoyer);
           await Future.delayed(Duration(seconds: 2));
           isVisible = false;
           setState(() {});
