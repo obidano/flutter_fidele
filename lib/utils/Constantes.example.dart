@@ -1,6 +1,6 @@
 
 class Constantes{
-  static String BASE_URL="http://192.168.137.1/api_flutter";
+  static String BASE_URL="http://IP_SERVEUR/api_flutter";
   static String fidelesEndpoint="/fideles.php";
   static String authEndpoint="/authentification.php";
 
