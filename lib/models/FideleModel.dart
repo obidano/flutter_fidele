@@ -4,12 +4,12 @@
 
 import 'dart:convert';
 
-FideleModele fideleModeleFromJson(String str) => FideleModele.fromJson(json.decode(str));
+FideleModel fideleModeleFromJson(String str) => FideleModel.fromJson(json.decode(str));
 
-String fideleModeleToJson(FideleModele data) => json.encode(data.toJson());
+String fideleModeleToJson(FideleModel data) => json.encode(data.toJson());
 
-class FideleModele {
-  FideleModele({
+class FideleModel {
+  FideleModel({
     this.id,
     this.prenom,
     this.nom,
@@ -23,7 +23,7 @@ class FideleModele {
   int? age;
   String? image;
 
-  factory FideleModele.fromJson(Map json) => FideleModele(
+  factory FideleModel.fromJson(Map json) => FideleModel(
     id: json["id"],
     prenom: json["prenom"],
     nom: json["nom"],
