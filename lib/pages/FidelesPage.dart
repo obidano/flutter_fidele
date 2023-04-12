@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fidele/controllers/UserCtrl.dart';
 import 'package:flutter_fidele/models/FideleModel.dart';
+import 'package:flutter_fidele/pages/FormFidelePage.dart';
 import 'package:flutter_fidele/pages/LoginPage.dart';
 import 'package:flutter_fidele/utils/Stockage.dart';
 import 'package:provider/provider.dart';
@@ -20,12 +21,11 @@ class _FidelesPageState extends State<FidelesPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var fideleCtrl = context.read<FideleCtrl>();
       fideleCtrl.recuperDataAPI();
-
     });
-
   }
 
   @override
@@ -84,7 +84,14 @@ class _FidelesPageState extends State<FidelesPage> {
                 return ListTile(
                   title: Text("${f.nom}"),
                   subtitle: Text("${f.prenom}"),
-                  trailing: Icon(Icons.arrow_right),
+                  trailing: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => FormFidelePage(fidele_id: f.id,)));
+                      },
+                      icon: Icon(Icons.arrow_right)),
                   leading: f.image != null
                       ? Image.network("${Constantes.BASE_URL}/${f.image!}")
                       : Icon(Icons.error),
