@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 Future<dynamic> getData(String url_api) async{
   try {
     var url = Uri.parse(url_api);
-    var reponse = await http.get(url);
+    var reponse = await http.get(url).timeout(Duration(seconds: 5));
     print(reponse.runtimeType);
     print(reponse.body.runtimeType);
     print(reponse.body); // contient le resultat de la reponse
