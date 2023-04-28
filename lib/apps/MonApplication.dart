@@ -23,10 +23,11 @@ class MonApplication extends StatelessWidget {
         ChangeNotifierProvider(create: (_)=> FideleCtrl(stockage: box)),
         ChangeNotifierProvider(create: (_)=> UserCtrl(stockage: box )),
         ChangeNotifierProvider(create: (_)=> EventCtrl()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: user!=null? FidelesPage(): LoginPage(),
+        home: FormFidelePage() //user!=null? FidelesPage(): LoginPage(),
       ),
     );
   }

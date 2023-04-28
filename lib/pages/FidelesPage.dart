@@ -21,6 +21,7 @@ class _FidelesPageState extends State<FidelesPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //throw ("What is this");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var fideleCtrl = context.read<FideleCtrl>();
@@ -89,7 +90,9 @@ class _FidelesPageState extends State<FidelesPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => FormFidelePage(fidele_id: f.id,)));
+                                builder: (_) => FormFidelePage(
+                                      fidele_id: f.id,
+                                    )));
                       },
                       icon: Icon(Icons.arrow_right)),
                   leading: f.image != null

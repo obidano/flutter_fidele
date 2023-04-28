@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -181,11 +182,20 @@ class _FormFidelePageState extends State<FormFidelePage> {
     if (formkey.currentState?.validate() != true) {
       return;
     }
+    var fideleCtrl = context.read<FideleCtrl>();
+    var file = File(imageSelection!.path);
+    List<int> imageBytes = await file.readAsBytesSync();
+    String baseimage = base64Encode(imageBytes);
+
     Map dataAEnvoyer = {
       "prenom": firstName.text,
       "nom": lastName.text,
       "age": int.parse(age.text),
-      "image": ""
+      "image": baseimage
     };
+    print("image $dataAEnvoyer");
+    print(json.encode(dataAEnvoyer));
+   // return;
+    fideleCtrl.createFideleAPI(dataAEnvoyer);
   }
 }

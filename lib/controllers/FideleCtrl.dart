@@ -22,26 +22,34 @@ class FideleCtrl with ChangeNotifier {
     notifyListeners();
     var reponse = await getData(url);
     print(reponse);
-    if(reponse!=null){
-      List<FideleModel> temp= reponse
-          .map<FideleModel>((e) => FideleModel.fromJson(e)).toList();
-      fideles=temp;
+    if (reponse != null) {
+      List<FideleModel> temp =
+          reponse.map<FideleModel>((e) => FideleModel.fromJson(e)).toList();
+      fideles = temp;
       stockage?.write(Stockage.fidelesKey, reponse);
       notifyListeners();
       /*for(var r in reponse){
         var r_temp=FideleModel.fromJson(r);
         temp.add(r_temp);
       }*/
-    }else{
-      var dataStockee= stockage?.read(Stockage.fidelesKey);
-      var temp= dataStockee.map<FideleModel>(
-              (e)=> FideleModel.fromJson(e) ).toList();
-      fideles=temp;
+    } else {
+      var dataStockee = stockage?.read(Stockage.fidelesKey);
+      var temp =
+          dataStockee.map<FideleModel>((e) => FideleModel.fromJson(e)).toList();
+      fideles = temp;
       notifyListeners();
       print("data stockee:  $temp");
     }
     loading = false;
     notifyListeners();
+  }
+
+  Future<bool> createFideleAPI(Map data) async {
+    var url = "${Constantes.BASE_URL}${Constantes.createFileEndpoint}";
+    print(url);
+    var reponse = await postData(url, data);
+    print(reponse);
+    return true;
   }
 }
 
